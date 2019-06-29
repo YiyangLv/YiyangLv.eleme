@@ -28,17 +28,24 @@
                 <div class="price">
                   <span class="p-now">￥{{food.price}}</span><span class="p-old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
+                <div class="buys-wrapper">
+                  <buys :food="food"></buys>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
+    <shopcarts :selectfoods="selectFoods" :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice"></shopcarts>
   </div>
 </template>
 <script>
 import BScroll from 'better-scroll'
+import shopcarts from '../shopcarts/Shopcarts'
+import buys from '../buys/Buys'
 export default {
+  props: ['seller'],
   data() {
     return {
       goods: {},
@@ -50,7 +57,6 @@ export default {
   created() {
     this.$http.get('/api/goods')
       .then(res => {
-        console.log(res)
         if (res.data.errno === 0) {
           this.goods = res.data.data
           this.$nextTick(() => {
@@ -60,13 +66,21 @@ export default {
         }
       })
   },
+  components: {
+    shopcarts,
+    buys,
+  },
   methods: {
     selectMenu(index) {
-      console.log(index)
+      let foodList = this.$refs.foodlisthook;
+      let el = foodList[index];
+      this.foodsScroll.scrollToElement(el, 200)
+
+
     },
     _initScroll() {
       this.menuScroll = new BScroll(this.$refs.menuwrapper, { click: true });
-      this.foodsScroll = new BScroll(this.$refs.foodswrapper, { probeType: 3 });
+      this.foodsScroll = new BScroll(this.$refs.foodswrapper, { probeType: 3, click: true });
       this.foodsScroll.on('scroll', (pos) => {
         this.scrollY = Math.abs(Math.round(pos.y))
       })
@@ -92,6 +106,18 @@ export default {
         };
       };
       return 0;
+    },
+    selectFoods() {
+      let foods = [];
+      let good = Array.from(this.goods);
+      good.forEach((good) => {
+        good.foods.forEach((food) => {
+          if (food.count) {
+            foods.push(food);
+          }
+        })
+      })
+      return foods;
     }
   }
 
@@ -188,9 +214,10 @@ export default {
     }
 
     .food-item {
+      position: relative;
       display: flex;
       margin: 18px;
-      padding-top: 18px;
+      padding-bottom: 18px;
       border-bottom: 0.5px solid rgba(7, 17, 27, 0.1);
 
       &:last-child {
@@ -247,6 +274,12 @@ export default {
             font-size: 10px;
             color: rgb(147, 153, 159);
           }
+        }
+
+        .buys-wrapper {
+          position: absolute;
+          right: 0;
+          bottom: 12px;
         }
       }
     }

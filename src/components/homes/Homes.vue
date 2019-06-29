@@ -74,7 +74,7 @@
       </transition>
     </div>
     <!-- 引入头部下面组件 -->
-    <conten></conten>
+    <conten :seller="seller"></conten>
   </div>
 </template>
 <script>
@@ -99,7 +99,7 @@ export default {
   },
   components: {
     star,
-    conten
+    conten,
   },
   methods: {
     changeShowDetail() {

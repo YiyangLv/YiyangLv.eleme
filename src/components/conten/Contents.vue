@@ -13,11 +13,13 @@
         </el-col>
       </el-menu>
     </el-row>
-    <router-view></router-view>
+    <router-view :seller="seller"></router-view>
   </div>
 </template>
 <script>
-export default {}
+export default {
+  props: ['seller']
+}
 
 </script>
 <style lang="less">
