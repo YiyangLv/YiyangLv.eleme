@@ -15,7 +15,7 @@
         <li v-for="(item,index) in goods" :key="index" class="food-list" ref="foodlisthook">
           <h1 class="titile">{{item.name}}</h1>
           <ul>
-            <li v-for="food in item.foods" class="food-item">
+            <li @click="selecedFood(food)" v-for="food in item.foods" class="food-item">
               <div class="icon">
                 <img width="57" height="57" :src="food.icon">
               </div>
@@ -38,12 +38,14 @@
       </ul>
     </div>
     <shopcarts :selectfoods="selectFoods" :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice"></shopcarts>
+    <foods :foods="selecedFoods" ref="foods"></foods>
   </div>
 </template>
 <script>
 import BScroll from 'better-scroll'
 import shopcarts from '../shopcarts/Shopcarts'
 import buys from '../buys/Buys'
+import foods from '../foods/Foods'
 export default {
   props: ['seller'],
   data() {
@@ -52,6 +54,7 @@ export default {
       classMap: ['decrease', 'discount', 'guarantee', 'invoice', 'special'],
       listHeight: [],
       scrollY: 0,
+      selecedFoods: {},
     }
   },
   created() {
@@ -59,24 +62,26 @@ export default {
       .then(res => {
         if (res.data.errno === 0) {
           this.goods = res.data.data
-          this.$nextTick(() => {
-            this._initScroll()
-            this.countHeight()
-          })
+          console.log(this.goods)
+          this._initScroll()
+          this.countHeight()
         }
       })
   },
   components: {
     shopcarts,
     buys,
+    foods,
   },
   methods: {
     selectMenu(index) {
       let foodList = this.$refs.foodlisthook;
       let el = foodList[index];
       this.foodsScroll.scrollToElement(el, 200)
-
-
+    },
+    selecedFood(food) {
+      this.selecedFoods = food;
+      this.$refs.foods.show()
     },
     _initScroll() {
       this.menuScroll = new BScroll(this.$refs.menuwrapper, { click: true });
@@ -86,14 +91,17 @@ export default {
       })
     },
     countHeight() {
-      let foodList = this.$refs.foodlisthook;
-      let height = 0;
-      this.listHeight.push(height);
-      for (let i = 0; i < foodList.length; i++) {
-        let item = foodList[i];
-        height += item.clientHeight;
-        this.listHeight.push(height)
-      }
+      this.$nextTick(() => {
+        let foodList = this.$refs.foodlisthook;
+        console.log(foodList)
+        let height = 0;
+        this.listHeight.push(height);
+        for (let i = 0; i < foodList.length; i++) {
+          let item = foodList[i];
+          height += item.clientHeight;
+          this.listHeight.push(height)
+        }
+      })
     }
   },
   computed: {

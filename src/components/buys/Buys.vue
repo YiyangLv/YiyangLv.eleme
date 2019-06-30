@@ -1,12 +1,12 @@
 <template>
   <div class="buys">
     <transition name="rotateDownRight" leave-active-class="fadeOutRight">
-      <div class="buys-down icon-remove_circle_outline" v-show="food.count>0" @click=downBuys></div>
+      <div class="buys-down icon-remove_circle_outline" v-show="food.count>0" @click.stop.prevent=downBuys></div>
     </transition>
     <transition name="rotateDownRight" leave-active-class="fadeOutRight">
       <div class="buys-count" v-show="food.count>0">{{food.count}}</div>
     </transition>
-    <div class="buys-add icon-add_circle" @click="addBuys"></div>
+    <div class="buys-add icon-add_circle" @click.stop.prevent="addBuys"></div>
   </div>
 </template>
 <script>

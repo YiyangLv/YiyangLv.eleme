@@ -94,6 +94,7 @@ export default {
       .then(res => {
         if (res.data.errno === 0) {
           this.seller = res.data.data
+          console.log(this.seller)
         }
       })
   },

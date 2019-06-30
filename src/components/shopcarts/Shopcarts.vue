@@ -63,9 +63,11 @@ export default {
       this.fold = !this.fold
     },
     clear() {
-      this.selectfoods.forEach((food) => {
-        food.count = 0;
-      })
+      if (this.selectfoods) {
+        this.selectfoods.forEach((food) => {
+          food.count = 0;
+        })
+      }
     },
     hide() {
       this.fold = true
@@ -80,17 +82,21 @@ export default {
   computed: {
     totalPrice() {
       let total = 0
-      this.selectfoods.forEach((food) => {
-        total += food.price * food.count
-      })
-      return total
+      if (this.selectfoods) {
+        this.selectfoods.forEach((food) => {
+          total += food.price * food.count
+        })
+        return total
+      }
     },
     totalCount() {
       let count = 0;
-      this.selectfoods.forEach((food) => {
-        count += food.count;
-      })
-      return count;
+      if (this.selectfoods) {
+        this.selectfoods.forEach((food) => {
+          count += food.count;
+        })
+        return count;
+      }
     },
     payDesc() {
       if (this.totalPrice === 0) {
