@@ -121,6 +121,7 @@ export default {
   position: fixed;
   left: 0;
   top: 174px;
+  bottom: 10px;
   width: 100%;
   background-color: #fff;
   z-index: 50;

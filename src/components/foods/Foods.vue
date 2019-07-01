@@ -31,7 +31,7 @@
         <splits></splits>
         <div class="rating">
           <div class="title">商品评价</div>
-          <rats :ratings="foods.ratings" :select-type="selectType" :only-content="onlyContent" :desc="desc" @changeselect="chSelect" @changeonlycontent=chOnlyContent></rats>
+          <rats :ratings="foods.ratings" :select-type="selectType" :only-content="onlyContent" :desc="desc"></rats>
           <div class="rating-wrapper">
             <ul v-show="foods.ratings && foods.ratings.length">
               <li v-show="needShow(rating.rateType,rating.text)" v-for="(rating,index) in foods.ratings" :key="index" class="rating-item">
